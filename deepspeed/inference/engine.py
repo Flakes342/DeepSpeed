@@ -125,7 +125,7 @@ class InferenceEngine(Module):
             moe = False
 
         if moe and dist.get_world_size() > 1:
-            self._create_ep_parallel_group(config.moe.moe_experts)
+            self._create_ep_parallel_group(config.moe.ep_size)
 
         # We only support three modes: 1) user specified policy for tensor-parallelism, 2) kernel injection (replace_with_kernel_inject), and 3) automatic tensor parallelism if tp_size > 1.
         if self.injection_dict:
