@@ -267,6 +267,11 @@ class InferenceEngine(Module):
             self.expert_mp_group.update({e: None})
         for moe_ep_size in self.ep_group.keys():
             num_ep_groups = dist.get_world_size() // moe_ep_size
+            # Basic check to see if the ep_size is valid
+            if num_ep_groups == 0:
+                raise ValueError(
+                    f"Invalid ep_size={moe_ep_size} for world_size={dist.get_world_size()}"
+                )
             for i in range(num_ep_groups):
                 ep_cnt = i * moe_ep_size
                 size = dist.get_world_size() if moe_ep_size > dist.get_world_size() else moe_ep_size
